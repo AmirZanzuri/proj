@@ -1,0 +1,59 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+/* Game Board Container */
+.board-container {
+    margin: 20px;
+    border: 2px solid #333;
+    display: inline-block;
+    padding: 10px;
+    background-color: #ddd;
+}
+
+/* Table Structure */
+table {
+    border-collapse: collapse;
+}
+
+tbody {
+    margin: 0;
+}
+
+/* Enhanced Cell Styling */
+.cell {
+    width: 300px;
+    height: 300px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    font-size: 5.5rem;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.1s ease, border 0.2s ease;
+    border: 2px solid #ccc;  /* Light gray border */
+    border-radius: 5px;  /* Rounded corners for a smoother look */
+}
+
+/* Styling for Covered Cells */
+.covered {
+    background-color: #cccccc;
+    color: transparent;
+}
+
+/* Hover Effect for Cells */
+.cell:hover {
+    border: 2px solid #555; /* Darker border on hover */  
+}

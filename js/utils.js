@@ -20,7 +20,7 @@ function renderBoard(mat, selector) {
             } else {
                 cellContent = cell.minesAroundCount || ''; 
             }
-            strHTML += `<td class="${className}" onclick="onCellClick(this, ${i}, ${j})">${cellContent}</td>`;
+            strHTML += `<td class="${className}" onclick="onCellClick(this, ${i}, ${j})"  oncontextmenu="onCellRightClick(this, ${i}, ${j}, event)">${cellContent}</td>`;
         }
 
         strHTML += '</tr>';
@@ -33,9 +33,26 @@ function renderBoard(mat, selector) {
 }
 
 
+// Convert a location object {i, j} to a selector and render a value in that element
+function renderCell(location, value) {
+    const cellSelector = '.' + getClassName(location)
+    const elCell = document.querySelector(cellSelector)
+    // console.log(elCell);
+    
+    elCell.innerHTML = value
+    }
+
+    // Returns the class name for a specific cell
+function getClassName(location) {
+    const cellClass = `cell-${location.i}-${location.j}`
+    // console.log(cellClass);
+    
+    return cellClass
+
+    }
 
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    
+  

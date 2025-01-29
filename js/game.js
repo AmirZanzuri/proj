@@ -1,7 +1,12 @@
 'use strict'
 
 const MINE_IMG = '<img src="img/mine.jpeg" alt="Mine">';
-const FLAG_IMG = '<img src="img/flag.png" alt="Flag">';
+const FLAG_IMG = '<img src="img/oip.jpeg" alt="Flag">';
+const WINRESET = '<img src="img/win.jpeg" alt="Flag">'
+const LOOSERESET = '<img src="img/sad.webp" alt="Flag">'
+const REGULARRESET = '<img src="img/smile.webp" alt="Flag">'
+var gNumOfClicks = 0
+const elResetButton = document.querySelector('.reset-button')
 var gBoard
 const gGame = {
     isOn: false,
@@ -10,63 +15,61 @@ const gGame = {
     secsPassed: 0
 }
 
-
+var gLives
 const gLevel = {
     size: 4,
-    mines: 2
+    mines: 2,
 }
 
 function onInit() {
-    console.log('hello')
-
+    gLives = 3
     gBoard = buildBoard()
-
     renderBoard(gBoard, '.board-container')
     gGame.isOn = true
+    elResetButton.innerHTML = `Reset ${REGULARRESET} `
 }
 
 
 function buildBoard() {
     const size = gLevel.size
     const board = []
-    var totalMines = gLevel.mines
-
-
     for (var i = 0; i < size; i++) {
         board.push([])
         for (var j = 0; j < size; j++) {
             board[i][j] = {
                 minesAroundCount: 0,
-                isCovered: false,
+                isCovered: true,
                 isMine: false,
                 isMarked: false,
             }
         }
     }
-    board[1][1].isMine = true
-    board[2][2].isMine = true
+    // board[1][1].isMine = true
+    // board[2][2].isMine = true
 
-    // while (totalMines > 0) {
-
-    //     var rendI = getRandomInt(0, size - 1)
-    //     var rendJ = getRandomInt(0, size - 1)
-    //     if (board[rendI][rendJ].isMine === false) {
-    //         board[rendI][rendJ].isMine = true
-    //         totalMines --
-    //     }
-    // }
-
-    for (var i = 0; i < board.length; i++) {
-        for (var j = 0; j < board.length; j++) {
-            var currCell = board[i][j]
-            currCell.minesAroundCount = setMinesNegsCount(i, j, board)
-        }
-
-    }
     return board
 
 }
 
+function createMines() {
+    const size = gLevel.size
+    var totalMines = gLevel.mines
+    while (totalMines > 0) {
+        var i = getRandomInt(0, size - 1)
+        var j = getRandomInt(0, size - 1)
+        if (gBoard[i][j].isMine === false) {
+            gBoard[i][j].isMine = true
+            totalMines--
+        }
+    }
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard.length; j++) {
+            var currCell = gBoard[i][j]
+            currCell.minesAroundCount = setMinesNegsCount(i, j, gBoard)
+        }
+
+    }
+}
 
 function setMinesNegsCount(rowIdx, colIdx, board) {
     const size = board.length;
@@ -88,15 +91,83 @@ function setMinesNegsCount(rowIdx, colIdx, board) {
 
 
 function onCellClick(elCell, i, j) {
-    console.log(gBoard[i][j])
-    console.log(elCell);
-    if (gBoard[i][j].isCovered) {
-        gBoard[i][j].isCovered = false
-    renderBoard(gBoard, '.board-container')
+    if (gNumOfClicks === 0) {
+        console.log(gNumOfClicks);
+        createMines()
 
-    } else { gBoard[i][j].isCovered = true }
-    console.log(gBoard[i][j])
-    console.log(elCell);
-    elCell.innerText = ""
+        gBoard[i][j].isCovered = false
+        elCell.innerHTML = gBoard[i][j].minesAroundCount
+        console.log();
+        gNumOfClicks = 1
+
+    }
+    else if (gBoard[i][j].isMine) {
+        gLives--
+        elCell.innerHTML = MINE_IMG
+        setTimeout(() => {
+            elCell.innerHTML = ""
+
+        }, 500);
+        checkIfGameOver()
+    } else {
+        gBoard[i][j].isCovered = false
+        elCell.innerHTML = gBoard[i][j].minesAroundCount
+        console.log();
+
+        checkFinish(gBoard[i][j])
+    }
+}
+
+function onCellRightClick(elCell, i, j, event) {
+    event.preventDefault()
+    gBoard[i][j].isMarked = true
+    elCell.innerHTML = FLAG_IMG
+    checkFinish()
+}
+
+
+function checkIfGameOver() {
+    var livesContainer = document.querySelector('span')
+    livesContainer.innerText = gLives
+    if (gLives === 0) {
+        gameOver()
+    }
+}
+function gameOver() {
+    gGame.isOn = false
+    const size = gBoard.length
+    console.log(size);
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            if (gBoard[i][j].isMine) {
+                gBoard[i][j].isCovered = false
+
+            }
+        }
+    }
+    elResetButton.innerHTML = `Reset ${LOOSERESET} `
+    renderBoard(gBoard, '.board-container')
+    alert('gameOver')
+}
+
+function checkFinish() {
+    for (let i = 0; i < gBoard.length; i++) {
+        for (let j = 0; j < gBoard.length; j++) {
+            var currCell = gBoard[i][j]
+            console.log(currCell);
+
+            if (currCell.isCovered && !currCell.isMarked) {
+                console.log('notYet');
+                return
+            }
+            else if (currCell.isMine && !currCell.isMarked) {
+                console.log('notYet');
+                return
+            }
+        }
+    }
+    elResetButton.innerHTML = `Reset ${WINRESET} `
+    console.log("vvvvvv");
+    alert("victory")
 
 }

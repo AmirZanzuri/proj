@@ -1,11 +1,17 @@
 'use strict'
 
-const MINE_IMG = '<img src="img/mine.jpeg" alt="Mine">';
-const FLAG_IMG = '<img src="img/oip.jpeg" alt="Flag">';
-const WINRESET = '<img src="img/win.jpeg" alt="Flag">'
-const LOOSERESET = '<img src="img/sad.webp" alt="Flag">'
-const REGULARRESET = '<img src="img/smile.webp" alt="Flag">'
+const MINE_IMG = '<img src="img/mine.webp" alt="Mine" class="img">';
+const FLAG_IMG = '<img src="img/flag.webp" alt="Flag" class="img">';
+const WINRESET = '<img src="img/win.jpeg" alt="win" class="img">'
+const LOOSERESET = '<img src="img/sad.png" alt="sad" class="img">'
+const REGULARRESET = '<img src="img/regular.webp" alt="restart" class="img">'
+const HINTON = '<img src="img/hint.png" alt="hint" class="img">'
+const HINTOFF = '<img src="img/turned-off.png" alt="off" class="img">'
+const HITAVALBLE = '<img src="img/bulb.webp" alt="bulb" class="img">'
+
+
 var gNumOfClicks = 0
+var isHint = false
 const elResetButton = document.querySelector('.reset-button')
 var gBoard
 const gGame = {
@@ -19,16 +25,19 @@ var gLives
 const gLevel = {
     size: 4,
     mines: 2,
+    hints: 3
 }
 
 function onInit() {
     gLives = 3
     gBoard = buildBoard()
     renderBoard(gBoard, '.board-container')
-    gGame.isOn = true
+    // gGame.isOn = true
     elResetButton.innerHTML = `Reset ${REGULARRESET} `
+    gNumOfClicks = 0
+    gGame.isOn = true
+    gLevel.hints = 3
 }
-
 
 function buildBoard() {
     const size = gLevel.size
@@ -91,10 +100,13 @@ function setMinesNegsCount(rowIdx, colIdx, board) {
 
 
 function onCellClick(elCell, i, j) {
-    if (gNumOfClicks === 0) {
+    if (isHint) {
+        hint(i, j)
+        isHint = false
+    }
+    else if (gNumOfClicks === 0) {
         console.log(gNumOfClicks);
         createMines()
-
         gBoard[i][j].isCovered = false
         elCell.innerHTML = gBoard[i][j].minesAroundCount
         console.log();
@@ -106,13 +118,11 @@ function onCellClick(elCell, i, j) {
         elCell.innerHTML = MINE_IMG
         setTimeout(() => {
             elCell.innerHTML = ""
-
         }, 500);
         checkIfGameOver()
     } else {
         gBoard[i][j].isCovered = false
         elCell.innerHTML = gBoard[i][j].minesAroundCount
-        console.log();
 
         checkFinish(gBoard[i][j])
     }
@@ -123,6 +133,51 @@ function onCellRightClick(elCell, i, j, event) {
     gBoard[i][j].isMarked = true
     elCell.innerHTML = FLAG_IMG
     checkFinish()
+}
+
+function turnOnHint(elButton) {
+    elButton.innerHTML = HINTON
+    isHint = true
+
+}
+
+function hint(rowIdx, colIdx) {
+    for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue;
+        for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+            if (j < 0 || j >= gBoard.length) continue;
+            var cell = gBoard[i][j];
+            var elCell = document.querySelector(`.cell-${i}-${j}`);
+            console.log(elCell);
+            if (cell.isCovered) {
+                if (cell.isMine) {
+                    elCell.innerHTML = MINE_IMG;
+                } else {
+                    elCell.innerHTML = cell.minesAroundCount;
+
+                }
+            }
+
+        }
+    }
+    setTimeout(() => {
+        for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+            if (i < 0 || i >= gBoard.length) continue;
+            for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+                if (j < 0 || j >= gBoard.length) continue;
+                cell = gBoard[i][j];
+                elCell = document.querySelector(`.cell-${i}-${j}`);
+                console.log(elCell);
+                if (cell.isCovered && !cell.isMarked) {
+                    elCell.innerHTML = "";
+                } else if (cell.isCovered && cell.isMarked) {
+                    elCell.innerHTML = FLAG_IMG;
+
+                }
+            }
+
+        }
+    }, 2000);
 }
 
 
@@ -154,14 +209,11 @@ function checkFinish() {
     for (let i = 0; i < gBoard.length; i++) {
         for (let j = 0; j < gBoard.length; j++) {
             var currCell = gBoard[i][j]
-            console.log(currCell);
 
             if (currCell.isCovered && !currCell.isMarked) {
-                console.log('notYet');
                 return
             }
             else if (currCell.isMine && !currCell.isMarked) {
-                console.log('notYet');
                 return
             }
         }

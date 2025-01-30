@@ -18,7 +18,7 @@ function renderBoard(mat, selector) {
             } else if (cell.isMarked) {
                 cellContent = FLAG_IMG; 
             } else {
-                cellContent = cell.minesAroundCount || ''; 
+                cellContent = cell.minesAroundCount; 
             }
             strHTML += `<td class="${className}" onclick="onCellClick(this, ${i}, ${j})"  oncontextmenu="onCellRightClick(this, ${i}, ${j}, event)">${cellContent}</td>`;
         }

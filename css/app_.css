@@ -1,0 +1,103 @@
+/* body {
+    font-family: 'Arial', sans-serif;
+    background-color: #a0b3c5;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.board-container {
+    display: inline-block;
+    border: 5px solid #333;
+    background-color: #d1d8e0;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+table {
+    border-collapse: collapse;
+    margin: auto;
+}
+
+td {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #333;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #a4b0be;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+td:hover {
+    background-color: #778ca3;
+}
+
+.cell-revealed {
+    background-color: #ecf0f1 !important;
+    cursor: default;
+}
+
+.cell-mine {
+    background-color: #e74c3c !important;
+    animation: blink 0.3s linear infinite alternate;
+}
+
+@keyframes blink {
+    from { background-color: #e74c3c; }
+    to { background-color: #c0392b; }
+}
+
+.cell-flagged {
+    background-color: #f1c40f !important;
+}
+
+.reset-container {
+    margin: 20px;
+}
+
+.reset-button {
+    background-color: #3498db;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.reset-button:hover {
+    background-color: #2980b9;
+}
+
+.lives-counter {
+    font-size: 20px;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #e67e22;
+}
+.img {
+    width: 25px;
+    height: 25px; 
+}
+h1 {
+    color: #333;
+}
+
+#timer {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 20px;
+}
+.safe-appears {
+    background-color: greenyellow;
+} */
+
+/* Modern color palette */
+
+

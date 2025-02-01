@@ -10,16 +10,44 @@
 </head>
 
 <body onload="onInit()">
-    <div class="reset-container">
-        <button onclick="onInit()" class="reset-button"> </button>
-    </div>
-    <button onclick="turnOnHint(this)">hint1</button> <button onclick="">hint2</button> <button onclick="">hint3</button>
 
-
+    <div class="safe-container"></div>
+    <div class="hints-container"></div>
+    <div class="mega-hint-container"></div>
+    <div id="timer">Time: 0</div>
     <div class="board-container"></div>
+    <div class="lives-counter">Remaining Lives = <span>3</span></div>     <div class="reset-container"></div>
+        <button onclick="onInit()" class="reset-button">
+            <img src="img/smile.jpeg" alt="Reset" class="img">
+        </button>
+    </div>
+    <div class="score-board">
+        <h2>Best Score</h2>
+        <table border="1">
+            <tr>
+                <th>Level</th>
+                <th>Top Score</th>
+            </tr>
+            <tr>
+                <td>Beginner</td>
+                <td class="begginer-best"></td>
+            </tr>
+            <tr>
+                <td>Medium</td>
+                <td class="medium-best"></td>
+            </tr>
+            <tr>
+                <td>Expert</td>
+                <td class="expert-best"></td>
+            </tr>
+        </table>
+    </div>
+    </div>
+
     <script src="js/utils.js"></script>
     <script src="js/game.js"></script>
-    <div class = "lives-counter">Remaining Lives = <span>3</span></div>
+    <script src="js/aids.js"></script>
+
 </body>
 
 </html>

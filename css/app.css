@@ -1,86 +1,188 @@
+:root {
+    --primary: #2c3e50;
+    --secondary: #34495e;
+    --accent: #3498db;
+    --danger: #e74c3c;
+    --success: #2ecc71;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+    --shadow: rgba(0, 0, 0, 0.3);
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
     margin: 0;
     padding: 20px;
+    color: var(--light);
 }
 
-.board-container {
-    display: inline-block;
-    border: 5px solid #333;
-    background-color: #d1d8e0;
-    padding: 10px;
+.score-board {
+    margin-right: 20px;
+    align-items: right;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(6px);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 1px;
+    max-width: 300px;
+    width: 100%;
 }
+
 
 table {
-    border-collapse: collapse;
-    margin: auto;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    border-radius: 10px;
+    border: none;
+    margin-top: 15px;
+    width: 100%;
+    max-width: 400px; /* Max width for score table */
 }
 
-td {
-    width: 50px;
-    height: 50px;
-    border: 2px solid #333;
+table th, table td {
+    padding: 10px 20px;
+    border: none;
     text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #a4b0be;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
 }
 
-td:hover {
-    background-color: #778ca3;
+table th {
+    background: var(--accent);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.cell-revealed {
-    background-color: #ecf0f1 !important;
-    cursor: default;
+.lives-counter {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    padding: 10px 15px;
+    border-radius: 30px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: var(--light);
 }
 
-.cell-mine {
-    background-color: #e74c3c !important;
-    animation: blink 0.3s linear infinite alternate;
+#timer {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 16px;
+    margin: 8px 0;
+    backdrop-filter: blur(5px);
+    text-align: center;
+    color: var(--light);
 }
 
-@keyframes blink {
-    from { background-color: #e74c3c; }
-    to { background-color: #c0392b; }
-}
-
-.cell-flagged {
-    background-color: #f1c40f !important;
-}
-
-.reset-container {
-    margin: 20px;
+h2 {
+    color: var(--light);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 13px;
+    margin-top: 20px;
 }
 
 .reset-button {
-    background-color: #3498db;
-    color: white;
-    font-size: 18px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    padding: 15px;
     cursor: pointer;
+    border: none;
+    color: white;
     transition: background 0.3s;
 }
 
 .reset-button:hover {
-    background-color: #2980b9;
+    background: var(--secondary);
 }
 
-.lives-counter {
-    font-size: 20px;
-    margin-top: 10px;
+.reset-container {
+    text-align: center;
+    margin-bottom: 2px;
+}
+
+.hints-container, .safe-container, .mega-hint-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 5px;
+    color: var(--light);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+.cell {
+    width: 35px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     font-weight: bold;
-    color: #e67e22;
+    text-align: center;
+    color: var(--light);
+    position: relative;
+    padding: 0;
+    line-height: 35px;
+}
+
+.cell:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.cell img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+    .game-and-score-container {
+        flex-direction: column; 
+        gap: 20px;
+    }
+
+    .board-container {
+        flex: none;
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+        max-width: none;
+    }
+
+    .lives-counter {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .reset-button {
+        padding: 10px;
+    }
 }
 .img {
-    width: 25px;
-    height: 25px; 
+    max-width: 24px;
+    max-height: 24px;
+    object-fit: contain;
 }

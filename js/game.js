@@ -31,20 +31,20 @@ var megaHints
 var SafeClicks
 var gLives
 const gLevel = {
-    size: 5,
-    mines: 3,
+    size: 0,
+    mines: 0,
 }
 var selectedLevel
 var currScore
-var begginerBestScore = Infinity
-var mediumBestScore = Infinity
-var begginerBestScore = Infinity
+const bestScores = loadBestScores();
+var begginerBestScore = localStorage.getItem('begginerBestScore') || Infinity;
+var mediumBestScore = localStorage.getItem('mediumBestScore') || Infinity;
+var expertBestScore = localStorage.getItem('expertBestScore') || Infinity; 
 
 function onInit() {
     selectLevel()
     gLives = 3
     gBoard = buildBoard()
-    loadBestScores()
     renderBoard(gBoard, '.board-container')
     // gGame.isOn = true
     elResetButton.innerHTML = `Reset ${REGULARRESET_IMG} `
@@ -59,6 +59,11 @@ function onInit() {
     var elHints = document.querySelector('.hints-container')
     elHints.innerHTML = `Press first cell to start`
     document.getElementById("timer").textContent = `Time: ${timerCount}`;
+    loadBestScores()
+    begginerBestScore = bestScores.begginerBestScore;
+mediumBestScore = bestScores.mediumBestScore;
+expertBestScore = bestScores.expertBestScore;
+
 
 }
 
@@ -84,7 +89,7 @@ function buildBoard() {
 }
 
 function createMines() {
-    const size = gLevel.size
+    var size = gLevel.size
     var totalMines = gLevel.mines
     while (totalMines > 0) {
         var i = getRandomInt(0, size - 1)
@@ -94,10 +99,13 @@ function createMines() {
             totalMines--
         }
     }
+
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard.length; j++) {
             var currCell = gBoard[i][j]
-            currCell.minesAroundCount = setMinesNegsCount(i, j, gBoard)
+            if (!currCell.isMine) {
+                currCell.minesAroundCount = setMinesNegsCount(i, j, gBoard)
+            }
         }
 
     }
@@ -196,6 +204,9 @@ function uncoverNeigbours(rowIdx, colIdx) {
             if (!cell.isMarked) {
                 cell.isCovered = false
                 elCell.innerHTML = cell.minesAroundCount;
+                setTimeout(() => {
+                    checkFinish()
+                }, 100);
                 if (cell.minesAroundCount === 0) {
                     uncoverNeigbours(i, j)
                 }
@@ -245,43 +256,34 @@ function checkFinish() {
     elResetButton.innerHTML = `Reset ${WINRESET_IMG} `
     stopTimer()
     checkIfBest()
-    console.log("vvvvvv");
 
 }
-
 function checkIfBest() {
-    let begginerBestScore = localStorage.getItem('begginerBestScore') || Infinity;
-    let mediumBestScore = localStorage.getItem('mediumBestScore') || Infinity;
-    let expertBestScore = localStorage.getItem('expertBestScore') || Infinity;
-
-    var elExpertBestCobtainer = document.querySelector('.expert-best');
-    var elMediumBestCobtainer = document.querySelector('.medium-best');
-    var elBegginerBestCobtainer = document.querySelector('.begginer-best');
+    console.log(currScore);
+   
+    const elExpertBestContainer = document.querySelector('.expert-best');
+    const elMediumBestContainer = document.querySelector('.medium-best');
+    const elBegginerBestContainer = document.querySelector('.begginer-best');
 
     if (selectedLevel === 'Begginer' && currScore < begginerBestScore) {
         begginerBestScore = currScore;
-        elBegginerBestCobtainer.innerHTML = currScore;
-        localStorage.setItem('begginerBestScore', currScore);
-        alert("victory New Best Score")
-    } else if (selectedLevel === 'Begginer' && !currScore < begginerBestScore) {
-        alert('Victory')
+        elBegginerBestContainer.innerText = `Best: ${currScore}`;
+        localStorage.setItem('begginerBestScore', currScore); 
+        alert("Victory! New Best Score in Beginner!");
     }
-
-    if (selectedLevel === 'Medium' && currScore < mediumBestScore) {
+    else if (selectedLevel === 'Medium' && currScore < mediumBestScore) {
         mediumBestScore = currScore;
-        elMediumBestCobtainer.innerHTML = currScore;
-        localStorage.setItem('mediumBestScore', currScore);
-        alert("victory New Best Score")
-    } else if (selectedLevel === 'Medium' && !currScore < mediumBestScore) {
-    alert('Victory')
-}
-
-if (selectedLevel === 'Expert' && currScore < expertBestScore) {
-    expertBestScore = currScore;
-    elExpertBestCobtainer.innerHTML = currScore;
-    localStorage.setItem('expertBestScore', currScore);
-    alert("victory New Best Score")
-} else if (selectedLevel === 'Expert' && !currScore < expertBestScore) {
-    alert('Victory')
-}
+        elMediumBestContainer.innerText = `Best: ${currScore}`;
+        localStorage.setItem('mediumBestScore', currScore); 
+        alert("Victory! New Best Score in Medium!");
+    }
+    else if (selectedLevel === 'Expert' && currScore < expertBestScore) {
+        expertBestScore = currScore;
+        elExpertBestContainer.innerText = `Best: ${currScore}`;
+        localStorage.setItem('expertBestScore', currScore); 
+        alert("Victory! New Best Score in Expert!");
+    }
+    else {
+        alert('Victory!');
+    }
 }

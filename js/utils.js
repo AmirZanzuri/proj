@@ -2,7 +2,7 @@
 function selectLevel() {
     selectedLevel = prompt('Select - Beginner, Medium or expert')
     selectedLevel = selectedLevel.toLowerCase();
-    if (selectedLevel === 'beginner' || selectedLevel === '') {
+    if (selectedLevel === 'beginner') {
         gLevel.size = 4
         gLevel.mines = 2
     } else if (selectedLevel === 'medium') {
@@ -12,15 +12,25 @@ function selectLevel() {
         gLevel.size = 12
         gLevel.mines = 32
     } else if (selectedLevel === 'ran') {
-        gLevel.size = 36
-        gLevel.mines = 110
+        gLevel.size = 15
+        gLevel.mines = 70
+    }else {
+        gLevel.size = 4
+        gLevel.mines = 2
     }
 
 }
 
 function renderBoard(mat, selector) {
+  var elHints = document.querySelector('.hints-container')
+    elHints.innerHTML = ``
+    var elSafe = document.querySelector('.safe-container')
+    elSafe.innerHTML = ``
+    var elMegaHint = document.querySelector('.mega-hint-container')
+    elMegaHint.innerHTML = ``
+    var livesContainer = document.querySelector('span')
+    livesContainer.innerText = gLives
     var strHTML = '<table><tbody>';
-
     for (let i = 0; i < mat.length; i++) {
         strHTML += '<tr>';
 
@@ -76,13 +86,18 @@ function stopTimer() {
     timerInterval = null;
 }
 
-
 function loadBestScores() {
-    let begginerBestScore = localStorage.getItem('begginerBestScore') || 0;
-    let mediumBestScore = localStorage.getItem('mediumBestScore') || 0;
-    let expertBestScore = localStorage.getItem('expertBestScore') || 0;
+    let begginerBestScore = localStorage.getItem('begginerBestScore');
+    let mediumBestScore = localStorage.getItem('mediumBestScore');
+    let expertBestScore = localStorage.getItem('expertBestScore');
 
-    document.querySelector('.begginer-best').innerHTML = begginerBestScore;
-    document.querySelector('.medium-best').innerHTML = mediumBestScore;
-    document.querySelector('.expert-best').innerHTML = expertBestScore;
+    begginerBestScore = begginerBestScore ? begginerBestScore : Infinity;
+    mediumBestScore = mediumBestScore ? mediumBestScore : Infinity;
+    expertBestScore = expertBestScore ? expertBestScore : Infinity;
+
+    document.querySelector('.begginer-best').innerText = `Best: ${begginerBestScore}`;
+    document.querySelector('.medium-best').innerText = `Best: ${mediumBestScore}`;
+    document.querySelector('.expert-best').innerText = `Best: ${expertBestScore}`;
+
+    return { begginerBestScore, mediumBestScore, expertBestScore };
 }
